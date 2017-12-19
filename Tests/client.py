@@ -7,7 +7,6 @@ class Client:
 	TCP_IP = '127.0.0.1'
 	TCP_PORT = 1979
 	BUFFER_SIZE = 1024
-	MESSAGE = "Hello, World!"
 	SOCKET = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 	def __init__(self):
