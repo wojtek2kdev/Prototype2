@@ -1,4 +1,5 @@
 from time import sleep
+from server import Server
 from pyA20.gpio import gpio, port
 
 __author__ = "Wojciech Sadowski"
@@ -10,6 +11,9 @@ __email__ = "wojtek2kdev@gmail.com"
 
 class Engine:
 
+	server = Server()
+	move = 0
+
 	Side = {
 
 		"FRONT_LEFT" : port.PA12,
@@ -19,8 +23,12 @@ class Engine:
 
 	def __init__(self):
 		gpio.init()
-		for engine in [Side['FRONT_LEFT'], Side['FRONT_RIGHT']]:
+		server.registerListener(lambda move: setMove(move), 'ENGINE')
+		for engine in [self.Side['FRONT_LEFT'], self.Side['FRONT_RIGHT']]:
 			gpio.setcfg(engine, gpio.OUTPUT)
+
+	def setMove(self, move):
+		self.move = move
 
 	def enableEngine(self, side):
 		gpio.output(side, 1)
