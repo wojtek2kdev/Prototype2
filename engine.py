@@ -1,5 +1,5 @@
 from time import sleep
-from pyA20 import gpio, port
+from pyA20.gpio import gpio, port
 
 __author__ = "Wojciech Sadowski"
 __credits__ = ["Wojciech Sadowski"]
@@ -8,14 +8,28 @@ __version__ = "2.0"
 __maintainer__ = __author__
 __email__ = "wojtek2kdev@gmail.com"
 
-Engine = {
+class Engine:
 
-	FRONT_LEFT : port.PA12,
-	FRONT_RIGHT : port.PA11
+	Side = {
 
-}
+		"FRONT_LEFT" : port.PA12,
+		"FRONT_RIGHT" : port.PA11
 
-gpio.init()
-for engine in [Engine.FRONT_LEFT, Engine.FRONT_RIGHT]:
-	gpio.setcfg(engine, gpio.OUTPUT)
-gpio.output(Engine.FRONT_LEFT, 1)
+	}
+
+	def __init__(self):
+		gpio.init()
+		for engine in [Side['FRONT_LEFT'], Side['FRONT_RIGHT']]:
+			gpio.setcfg(engine, gpio.OUTPUT)
+
+	def enableEngine(self, side):
+		gpio.output(side, 1)
+
+	def disableEngine(self, side):
+		gpio.output(side, 0)
+
+e = Engine()
+e.disableEngine(e.Side['FRONT_LEFT'])
+
+
+
