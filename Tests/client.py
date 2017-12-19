@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import socket
+import socket, json, time
 
 class Client:
 
@@ -17,9 +17,11 @@ class Client:
 	def sendData(self, data):
 		self.SOCKET.connect((self.TCP_IP, self.TCP_PORT))
 		self.SOCKET.send(data)
-		recv = self.SOCKET.recv(self.BUFFER_SIZE)
-		self.SOCKET.close()
+		while 1:
+			recv = self.SOCKET.recv(self.BUFFER_SIZE)
+			time.sleep(0.5)
+		#self.SOCKET.close()
 		return recv
 
 c = Client()
-c.sendData('test')
+c.sendData(json.dumps({'target': 'engine', 'code': 1}))

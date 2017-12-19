@@ -2,29 +2,19 @@
 
 import json, socket
 
+__author__ = "Wojciech Sadowski"
+__credits__ = ["Wojciech Sadowski"]
+__license__ = "GPL"
+__version__ = "2.0"
+__maintainer__ = __author__
+__email__ = "wojtek2kdev@gmail.com"
+
 class Server:
-
-	def getServerInfo():
-		try:
-			with open('config.json', 'r') as config:
-				return json.loads(config.read())
-		except Exception as e:
-			print e
-
-	CONFIG = getServerInfo()
-	TCP_IP = CONFIG['ip']
-	TCP_PORT = CONFIG['port']
-	BUFFER_SIZE = CONFIG['buffer_size']  # Normally 1024, but we want fast response
-
-	SOCKET = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	SOCKET.bind((TCP_IP, TCP_PORT))
-	SOCKET.listen(1)
 
 	Listener = {
 
-		'ENGINE' : []
-		#other
-
+	    'ENGINE' : []
+			#other
 	}
 
 	Status = {
@@ -34,17 +24,75 @@ class Server:
 
 	}
 
-	def registerListener(self, listener, _type):
+	@staticmethod
+	def registerListener(listener, target):
+		print 'CODE 002'
 		{
-			'engine' : Listener['ENGINE']
-		}[_type].append(listener)
+			'engine' : Server.Listener['ENGINE']
+		}[target].append(listener)
+		print Server.Listener['ENGINE']
 
-	def getDataFromClient(self):
-		conn, addr = SOCKET.accept()
-		print 'Connection address:', addr
-		while 1:
-		    data = conn.recv(BUFFER_SIZE)
-		    #if not data: break
-		    print "received data:", data
-		    conn.send(self.Status['OK'])  # echo
-		conn.close()
+	if __name__ == '__main__':
+
+		TCP_IP = None
+		TCP_PORT = None
+		BUFFER_SIZE = None 
+		SOCKET = None
+		CONFIG = None
+
+		def getServerInfo(self):
+			try:
+				with open('config.json', 'r') as config:
+					return json.loads(config.read())
+			except Exception as e:
+				print '[ERROR!]: ' + str(e)
+
+
+		def __init__(self):
+			
+			self.CONFIG = self.getServerInfo()
+			self.TCP_IP = self.CONFIG['ip']
+			self.TCP_PORT = self.CONFIG['port']
+			self.BUFFER_SIZE = self.CONFIG['buffer_size']  # Normally 1024, but we want fast response
+
+			self.SOCKET = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+			self.SOCKET.bind((self.TCP_IP, self.TCP_PORT))
+			self.SOCKET.listen(1)
+
+			self.getDataFromClient()
+
+		
+
+
+		def sendDataToEngine(self, data):
+			print 'CODE 001'
+			for listener in Listener['ENGINE']:
+				listener(data)
+
+
+		def sendDataToListeners(self, target, data):
+			try:
+				{
+					'engine' : self.sendDataToEngine
+				}[target](data)
+			except:
+				print '[WARN!]: Not found listener'
+
+		def getDataFromClient(self):
+			print __author__ + ' license: ' + __license__ + ' email: ' + __email__
+			conn, addr = self.SOCKET.accept()
+			print 'Connection address:', addr
+			while 1:
+			    data = conn.recv(self.BUFFER_SIZE)
+			    try:
+			    	if data:
+				    	data = json.loads(data)
+				    	self.sendDataToListeners(data['target'], data['code'])
+			    except Exception as e:
+			    	print '[ERROR!]: ' + str(e)
+			    #if not data: break
+			    print "received data:", data
+			    conn.send(str(self.Status['OK']))  # echo
+			conn.close()
+
+s = Server()
