@@ -70,12 +70,12 @@ class Server:
 
 
 	def sendDataToListeners(self, target, data):
-		'''try:
+		try:
 			{
 				'engine' : self.sendDataToEngine
 			}[target](data)
-		except:
-			print '[WARN!]: Not found listener'''
+		except Exception as e:
+			print e #'[WARN!]: Not found listener'
 
 	def getDataFromClient(self):
 		print __author__ + ' license: ' + __license__ + ' email: ' + __email__

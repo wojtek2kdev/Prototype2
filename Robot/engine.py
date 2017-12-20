@@ -28,7 +28,7 @@ class Engine:
 
 	def register(self, Server):
 		print 'CODE 004'
-		Server.registerListener(lambda move: setMove(move), 'engine')
+		Server.registerListener(lambda move: self.setMove(move), 'engine')
 
 	def setMove(self, move):
 		self.move = move
