@@ -36,7 +36,7 @@ class Server:
 		{
 			'engine' : Server.Listener['ENGINE']
 		}[target].append(listener)
-		print Server.Listener['ENGINE']
+		print self.Listener['ENGINE']
 
 	def getServerInfo(self):
 		try:
@@ -64,17 +64,18 @@ class Server:
 
 	def sendDataToEngine(self, data):
 		print 'CODE 001'
-		for listener in Listener['ENGINE']:
+		print self.Listener['ENGINE'][0]
+		for listener in self.Listener['ENGINE']:
 			listener(data)
 
 
 	def sendDataToListeners(self, target, data):
-		try:
+		'''try:
 			{
 				'engine' : self.sendDataToEngine
 			}[target](data)
 		except:
-			print '[WARN!]: Not found listener'
+			print '[WARN!]: Not found listener'''
 
 	def getDataFromClient(self):
 		print __author__ + ' license: ' + __license__ + ' email: ' + __email__
