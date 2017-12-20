@@ -9,8 +9,6 @@ __version__ = "2.0"
 __maintainer__ = __author__
 __email__ = "wojtek2kdev@gmail.com"
 
-INFO = '[INFO]: '
-
 class Engine:
 
 	move = 0

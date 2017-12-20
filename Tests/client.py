@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import socket, json, time
+from time import sleep
 
 class Client:
 
@@ -17,6 +18,8 @@ class Client:
 	def sendData(self, data):
 		self.SOCKET.connect((self.TCP_IP, self.TCP_PORT))
 		self.SOCKET.send(data)
+		sleep(3)
+		self.SOCKET.send(json.dumps({'target': 'engine', 'code': 1}))
 		while 1:
 			recv = self.SOCKET.recv(self.BUFFER_SIZE)
 			time.sleep(0.5)
@@ -24,4 +27,4 @@ class Client:
 		return recv
 
 c = Client()
-c.sendData(json.dumps({'target': 'engine', 'code': 1}))
+c.sendData(json.dumps({'target': 'engine', 'code': 0}))
