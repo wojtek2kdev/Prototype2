@@ -1,5 +1,4 @@
 from time import sleep
-from server import Server
 #from pyA20.gpio import gpio, port
 
 __author__ = "Wojciech Sadowski"
@@ -13,6 +12,8 @@ class Engine:
 
 	move = 0
 
+	Server = None
+
 	'''Side = {
 
 		"FRONT_LEFT" : port.PA12,
@@ -23,9 +24,13 @@ class Engine:
 	def __init__(self):
 		#gpio.init()
 		print 'Engine Init'
-		Server.registerListener(lambda move: setMove(move), 'engine')
+		
 		#for engine in [self.Side['FRONT_LEFT'], self.Side['FRONT_RIGHT']]:
 			#gpio.setcfg(engine, gpio.OUTPUT)
+
+	def register(Server):
+		print 'CODE 004'
+		Server.registerListener(lambda move: setMove(move), 'engine')
 
 	def setMove(self, move):
 		self.move = move
@@ -37,10 +42,6 @@ class Engine:
 	def disableEngine(self, side):
 		gpio.output(side, 0)
 
-e = Engine()
-while 1:
-	print e.move
-	sleep(0.1)
 #e.disableEngine(e.Side['FRONT_LEFT'])
 
 
