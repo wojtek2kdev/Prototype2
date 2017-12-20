@@ -1,4 +1,5 @@
 from time import sleep
+import log
 #from pyA20.gpio import gpio, port
 
 __author__ = "Wojciech Sadowski"
@@ -7,6 +8,8 @@ __license__ = "GPL"
 __version__ = "2.0"
 __maintainer__ = __author__
 __email__ = "wojtek2kdev@gmail.com"
+
+INFO = '[INFO]: '
 
 class Engine:
 
@@ -21,18 +24,16 @@ class Engine:
 
 	def __init__(self):
 		#gpio.init()
-		print 'Engine Init'
-		
+		log.out('info', ['Engine module enabled!', 'Init pinout..'], '__init__', 'Engine')
 		#for engine in [self.Side['FRONT_LEFT'], self.Side['FRONT_RIGHT']]:
 			#gpio.setcfg(engine, gpio.OUTPUT)
 
 	def register(self, Server):
-		print 'CODE 004'
 		Server.registerListener(lambda move: self.setMove(move), 'engine')
 
 	def setMove(self, move):
 		self.move = move
-		print 'Engine Listener Test'
+		log.out('info', ['Move code: ' + move], 'setMove', 'Engine')
 
 	def enableEngine(self, side):
 		gpio.output(side, 1)

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import json, socket
+import json, socket, log
 from threading import Thread
 
 __author__ = "Wojciech Sadowski"
@@ -32,18 +32,16 @@ class Server:
 	CONFIG = None
 
 	def registerListener(self, listener, target):
-		print 'CODE 002'
 		{
 			'engine' : Server.Listener['ENGINE']
 		}[target].append(listener)
-		print self.Listener['ENGINE']
 
 	def getServerInfo(self):
 		try:
 			with open('config.json', 'r') as config:
 				return json.loads(config.read())
 		except Exception as e:
-			print '[ERROR!]: ' + str(e)
+			log.out('err', [str(e)], 'getServerInfo', 'Server')
 
 
 	def __init__(self):
@@ -63,8 +61,6 @@ class Server:
 
 
 	def sendDataToEngine(self, data):
-		print 'CODE 001'
-		print self.Listener['ENGINE'][0]
 		for listener in self.Listener['ENGINE']:
 			listener(data)
 
@@ -73,9 +69,9 @@ class Server:
 		try:
 			{
 				'engine' : self.sendDataToEngine
-			}[target](data)
+			}[target](str(data))
 		except Exception as e:
-			print e #'[WARN!]: Not found listener'
+			log.out('warn', [str(e)], 'sendDataToListeners', 'Server')
 
 	def getDataFromClient(self):
 		print __author__ + ' license: ' + __license__ + ' email: ' + __email__
@@ -88,7 +84,7 @@ class Server:
 			    	data = json.loads(data)
 			    	self.sendDataToListeners(data['target'], data['code'])
 		    except Exception as e:
-		    	print '[ERROR!]: ' + str(e)
+		    	log.out('err', [str(e)], 'getDataFromClient', 'Server')
 		    #if not data: break
 		    print "received data:", data
 		    conn.send(str(self.Status['OK']))  # echo
