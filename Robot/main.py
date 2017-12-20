@@ -9,6 +9,7 @@ queue = Queue.Queue()
 e = Engine()
 s = Server()
 
+print 'CODE 005'
 e.register(s)
 
 '''

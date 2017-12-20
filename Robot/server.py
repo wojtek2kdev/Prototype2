@@ -31,10 +31,6 @@ class Server:
 	SOCKET = None
 	CONFIG = None
 
-	def setEngine(self, e):
-		eng = e
-		eng.setMove(1)
-
 	def registerListener(self, listener, target):
 		print 'CODE 002'
 		{
@@ -61,8 +57,8 @@ class Server:
 		self.SOCKET.bind((self.TCP_IP, self.TCP_PORT))
 		self.SOCKET.listen(1)
 
-		self.getDataFromClient()
-
+		listen = Thread(target=self.getDataFromClient, args=())
+		listen.start()
 	
 
 

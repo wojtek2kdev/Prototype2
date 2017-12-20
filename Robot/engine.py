@@ -12,8 +12,6 @@ class Engine:
 
 	move = 0
 
-	Server = None
-
 	'''Side = {
 
 		"FRONT_LEFT" : port.PA12,
@@ -28,7 +26,7 @@ class Engine:
 		#for engine in [self.Side['FRONT_LEFT'], self.Side['FRONT_RIGHT']]:
 			#gpio.setcfg(engine, gpio.OUTPUT)
 
-	def register(Server):
+	def register(self, Server):
 		print 'CODE 004'
 		Server.registerListener(lambda move: setMove(move), 'engine')
 
