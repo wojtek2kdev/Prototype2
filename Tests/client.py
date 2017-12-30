@@ -12,7 +12,14 @@ class Client:
 	BUFFER_SIZE = 1024
 	SOCKET = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-	ENABLE = 0
+	CODE = 0
+	IS_PRESS = 0
+
+
+	KeyEnable = {
+		"u'a'" : 1,
+		"u'd'" : 2
+	}
 
 	def __init__(self):
 		self.TCP_IP = raw_input("ip (127.0.0.1 by default): ") or self.TCP_IP
@@ -26,16 +33,13 @@ class Client:
 
 	def on_press(self, key):
 	    try:
-	        if key.char == 'w': self.ENABLE = 1
-	    except AttributeError:
-	        print('special key {0} pressed'.format(
-	            key))
+	    	self.IS_PRESS = 1
+	    	self.CODE = self.KeyEnable[str(key)]
+	    except KeyError:
+	        self.CODE = 0
 
 	def on_release(self, key):
-	    self.ENABLE = 0
-	    if key == keyboard.Key.esc:
-	        # Stop listener
-	        return False
+	    self.IS_PRESS = 0
 
 	# Collect events until released
 	def detectKeys(self):
@@ -46,16 +50,16 @@ class Client:
 
 	def sendData(self):
 		self.SOCKET.connect((self.TCP_IP, self.TCP_PORT))
-		#self.SOCKET.send(data)
-		self.SOCKET.send(json.dumps({'target': 'engine', 'code': 1}))
+		self.SOCKET.send(json.dumps({'target': 'engine', 'code': 0}))
 		while 1:
 			recv = self.SOCKET.recv(self.BUFFER_SIZE)
-			time.sleep(0.05)
-			if self.ENABLE == 0: 
+			time.sleep(0.1)
+			if not self.CODE == 0 and self.IS_PRESS: 
 				#log.out('info', 'Send code to server', 'sendData', 'Engine')
-				self.SOCKET.send(json.dumps({'target': 'engine', 'code': 0}))
+				self.SOCKET.send(json.dumps({'target': 'engine', 'code': self.CODE}))
 			else:
-				self.SOCKET.send(json.dumps({'target': 'engine', 'code': 1}))
+				self.SOCKET.send(json.dumps({'target': 'engine', 'code': 0}))
+		
 		#self.SOCKET.close()
 		return recv
 
