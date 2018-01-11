@@ -53,7 +53,7 @@ class Client:
 		self.SOCKET.send(json.dumps({'target': 'engine', 'code': 0}))
 		while 1:
 			recv = self.SOCKET.recv(self.BUFFER_SIZE)
-			time.sleep(0.1)
+			time.sleep(0.03)
 			if not self.CODE == 0 and self.IS_PRESS: 
 				#log.out('info', 'Send code to server', 'sendData', 'Engine')
 				self.SOCKET.send(json.dumps({'target': 'engine', 'code': self.CODE}))
